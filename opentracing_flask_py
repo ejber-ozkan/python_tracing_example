@@ -1,0 +1,24 @@
+from flask import Flask
+from flask import request
+import requests
+
+app = Flask(__name__)
+
+def pull_requests():
+
+  # Fetch a list of pull requests on the opentracing repository
+  github_url = "https://api.github.com/repos/opentracing/opentracing-python/pulls"
+  r = requests.get(github_url)
+  
+  json = r.json()
+  pull_request_titles = map(lambda item: item['title'], json)
+  
+  return 'OpenTracing Pull Requests: ' + ', '.join(pull_request_titles)
+
+@app.route('/')
+def hello():
+    return pull_requests()
+    #return "Welcome to the flask"
+
+if __name__ == "__main__":
+    app.run(host ='0.0.0.0', port = 5000, debug = True)  
