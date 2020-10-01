@@ -29,7 +29,7 @@ def pull_requests():
 def initialize_tracer():
   config = Config(
       config={
-          'sampler': {'type': 'const', 'param': 1}
+          'sampler': {'type': 'const', 'param': 1},
           'logging': True,
       },
       service_name='opentracing-flask')
