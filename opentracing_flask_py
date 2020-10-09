@@ -8,23 +8,31 @@ import opentracing
 
 app = Flask(__name__)
 
-def pull_requests():
+def get_common_api_status():
 
   # Fetch a list of pull requests on the opentracing repository
-  github_url = "https://api.github.com/repos/opentracing/opentracing-python/pulls"
+  #github_url = "https://api.github.com/repos/opentracing/opentracing-python/pulls"
+  common_api_url = "http://localhost:8080/status"
 
   parent_span = flask_tracer.get_span()
-  with opentracing.tracer.start_span('github-api', child_of=parent_span) as span:
-    span.set_tag("http.url",github_url)
-    r = requests.get(github_url)
+  with opentracing.tracer.start_span('common-api', child_of=parent_span) as span:
+    span.set_tag("http.url",common_api_url)
+
+    r = requests.get(common_api_url)
+
     span.set_tag("http.status_code", r.status_code)
   
   with opentracing.tracer.start_span('parse-json', child_of=parent_span) as span:
+
     json = r.json()
-    span.set_tag("pull_requests", len(json))
-    pull_request_titles = map(lambda item: item['title'], json)
-  
-  return 'OpenTracing Pull Requests: ' + ', '.join(pull_request_titles)
+
+    span.set_tag("get_status_count", len(json))
+
+    status_info = map(lambda item: item['title'], json)
+
+    span.set_tag("status_info", status_info)
+
+  return 'OpenTracing Common API Status: ' + ', '.join(status_info)
 
 def initialize_tracer():
   config = Config(
@@ -39,8 +47,8 @@ def initialize_tracer():
 
 @app.route('/')
 def hello():
-    return pull_requests()
-    #return "Welcome to the flask"
+    return get_common_api_status()
+    #return "Welcome to Tracing example"
 
 if __name__ == "__main__":
     flask_tracer = FlaskTracer(initialize_tracer, True, app)
