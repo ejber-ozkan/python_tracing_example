@@ -27,9 +27,10 @@ def get_common_api_status():
   with opentracing.tracer.start_span('parse-json', child_of=parent_span) as span:
 
     this_json = r.json()
-    app.logger.info('this_json : LEGNTH' + str(len(this_json)))
-    app.logger.info('this_json : JSON' +  str(this_json))
-    span.set_tag("get_status_count", len(this_json))
+
+    app.logger.info('common-api status return JSON ' +  str(this_json))
+
+    span.set_tag("get_status_items", len(this_json))
 
     status_dict = this_json
 
@@ -39,7 +40,7 @@ def get_common_api_status():
     span.set_tag("status_level", status_level)
     span.set_tag("status_description", status_description)
 
-  return 'OpenTracing Common API Status: ' + ', '.join(status_level) + ', '.join(status_description) + ','
+  return 'OpenTracing Common API Status: ' + ', '.join(status_level) + ' , '.join(status_description) + '.'
 
 def initialize_tracer():
   config = Config(
