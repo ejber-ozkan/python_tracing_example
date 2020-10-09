@@ -27,7 +27,8 @@ def get_common_api_status():
   with opentracing.tracer.start_span('parse-json', child_of=parent_span) as span:
 
     this_json = r.json()
-
+    app.logger.info('this_json : LEGNTH' + len(this_json))
+    app.logger.info('this_json : ?' + this_json)
     span.set_tag("get_status_count", len(this_json))
 
     status_dict = this_json
