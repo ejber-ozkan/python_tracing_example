@@ -28,10 +28,13 @@ def get_common_api_status():
 
     span.set_tag("get_status_count", len(json))
 
-    status_level = map(lambda item: item['level'], json)
-    status_description = map(lambda item: item['description'], json)
+    status_dict = json.loads(json)
 
+    status_level = status_dict['status_level']
+    status_description = status_dict['status_description']
+    
     span.set_tag("status_level", status_level)
+    span.set_tag("status_description", status_description)
 
   return 'OpenTracing Common API Status: ' + ', '.join(status_level) + ', '.join(status_description) + ','
 
