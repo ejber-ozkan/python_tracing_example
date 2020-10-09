@@ -12,7 +12,7 @@ def get_common_api_status():
 
   # Fetch a list of pull requests on the opentracing repository
   #github_url = "https://api.github.com/repos/opentracing/opentracing-python/pulls"
-  common_api_url = "http://localhost:8080/status"
+  common_api_url = "http://common-api:8080/status"
 
   parent_span = flask_tracer.get_span()
   with opentracing.tracer.start_span('common-api', child_of=parent_span) as span:
