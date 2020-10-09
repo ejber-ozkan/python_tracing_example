@@ -6,6 +6,8 @@ from jaeger_client import Config
 from flask_opentracing import FlaskTracer
 import opentracing
 
+import json
+
 app = Flask(__name__)
 
 def get_common_api_status():
@@ -24,11 +26,11 @@ def get_common_api_status():
   
   with opentracing.tracer.start_span('parse-json', child_of=parent_span) as span:
 
-    json = r.json()
+    this_json = r.json()
 
-    span.set_tag("get_status_count", len(json))
+    span.set_tag("get_status_count", len(this_json))
 
-    status_dict = json.loads(json)
+    status_dict = json.loads(this_json)
 
     status_level = status_dict['status_level']
     status_description = status_dict['status_description']
