@@ -30,7 +30,7 @@ def get_common_api_status():
 
     span.set_tag("get_status_count", len(this_json))
 
-    status_dict = json.loads(this_json)
+    status_dict = this_json
 
     status_level = status_dict['status_level']
     status_description = status_dict['status_description']
